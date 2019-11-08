@@ -13,3 +13,8 @@ categories = ["encoding"]
 exclude = [".gitignore"]
 
 [dependencies]
+
+[features]
+# Disabling this feature removes the dependency on the standard library
+# and makes the library no_std compatible.
+std = []

@@ -1,6 +1,9 @@
-use glyph::Glyph;
+#[cfg(feature = "std")]
 use std::mem::size_of_val;
+#[cfg(feature = "std")]
 use std::char::from_u32_unchecked;
+
+use glyph::Glyph;
 
 pub fn get_glyph(c: char) -> Option<&'static Glyph> {
     let code_point = c as usize;
@@ -17,6 +20,7 @@ pub fn get_glyph(c: char) -> Option<&'static Glyph> {
     result
 }
 
+#[cfg(feature = "std")]
 pub fn enumerate_glyphs() -> Box<Iterator<Item=(char, &'static Glyph)>> {
     let char_iterator = CODE_POINT_RANGES.iter()
         .flat_map(|(start, end)| *start..*end)
@@ -25,9 +29,11 @@ pub fn enumerate_glyphs() -> Box<Iterator<Item=(char, &'static Glyph)>> {
     Box::new(char_iterator.zip(glyph_iterator))
 }
 
+#[cfg(feature = "std")]
 pub fn get_storage_size() -> usize {
     size_of_val(&CODE_POINT_RANGES) + size_of_val(&GLYPH_TABLE)
 }
+
 
 include!(concat!(env!("OUT_DIR"), "/glyph_table.rs"));
 

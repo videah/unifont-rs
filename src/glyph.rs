@@ -9,10 +9,10 @@ impl Glyph {
         y < 16 &&
             match self {
                 Glyph::HalfWidth(rows) => {
-                    x < 8 && rows[y] & (0x80 >> x) != 0
+                    x < 8 && rows[y] & (0x80 >> x) as u8 != 0
                 }
                 Glyph::FullWidth(rows) => {
-                    x < 16 && rows[y] & (0x8000 >> x) != 0
+                    x < 16 && rows[y] & (0x8000 >> x) as u16 != 0
                 }
             }
     }
