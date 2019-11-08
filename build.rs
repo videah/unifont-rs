@@ -39,13 +39,13 @@ fn main() {
     let output_path = Path::new(&output_dir).join("glyph_table.rs");
     let mut output_file = File::create(&output_path).unwrap();
 
-    writeln!(output_file, "static CODE_POINT_RANGES: [(usize, usize); {}] = [", ranges.len());
+    writeln!(output_file, "static CODE_POINT_RANGES: [(usize, usize); {}] = [", ranges.len()).expect("Could not write range length");
     for (start, end) in ranges {
-        writeln!(output_file, "    ({}, {}),", start, end);
+        writeln!(output_file, "    ({}, {}),", start, end).expect("Failed whilst writing ranges");
     }
-    writeln!(output_file, "];");
+    writeln!(output_file, "];").expect("Could not write range end character");
 
-    writeln!(output_file, "static GLYPH_TABLE: [Glyph; {}] = [", glyph_map.len());
+    writeln!(output_file, "static GLYPH_TABLE: [Glyph; {}] = [", glyph_map.len()).expect("Could not write glyph table length");
     for data in glyph_map.values() {
         match data.len() {
             32 => {
@@ -57,7 +57,7 @@ fn main() {
                             format!("0x{}", hex)
                         })
                         .collect();
-                writeln!(output_file, "    Glyph::HalfWidth([{}]),", u8s.join(", "));
+                writeln!(output_file, "    Glyph::HalfWidth([{}]),", u8s.join(", ")).expect("Could not write half width glyph");
             },
             64 => {
                 let u16s: Vec<String> =
@@ -67,12 +67,12 @@ fn main() {
                             let hex: String = chunk.iter().cloned().collect();
                             format!("0x{}", hex)
                         }).collect();
-                writeln!(output_file, "    Glyph::FullWidth([{}]),", u16s.join(", "));
+                writeln!(output_file, "    Glyph::FullWidth([{}]),", u16s.join(", ")).expect("Could not write full width glyph");
             },
             _ => {
-                writeln!(output_file, "ERROR: invalid glyph data: {}", data);
+                writeln!(output_file, "ERROR: invalid glyph data: {}", data).expect("Could not write error message, it's the end of the world as we know it");
             },
         }
     }
-    writeln!(output_file, "];");
+    writeln!(output_file, "];").expect("Could not write glyph map end character");
 }
