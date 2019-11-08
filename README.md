@@ -21,3 +21,6 @@ impl Glyph {
     pub fn get_width(&self) -> usize,
 }
 ```
+
+## Targeting no_std
+This crate supports targeting no_std targets by disabling the `std` feature.
